@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: result
+  labels:
+    app: result
+    {{- include "appvote.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.result.service.type }}
+  ports:
+  - port: {{ .Values.result.service.port }}
+    targetPort: http
+    protocol: TCP
+    name: result-service
+    {{- if and (eq .Values.result.service.type "NodePort") .Values.result.service.nodePort }}
+    nodePort: {{ .Values.result.service.nodePort }}
+    {{- end }}
+  selector:
+    app: result
+    {{- include "appvote.selectorLabels" . | nindent 4 }}

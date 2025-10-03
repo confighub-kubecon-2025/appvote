@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "appvote.fullname" . }}-redis
+  labels:
+    app: redis
+    {{- include "appvote.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.redis.replicas }}
+  selector:
+    matchLabels:
+      app: redis
+      {{- include "appvote.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        app: redis
+        {{- include "appvote.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+      - name: redis
+        image: "{{ .Values.redis.image.repository }}:{{ .Values.redis.image.tag }}"
+        imagePullPolicy: {{ .Values.redis.image.pullPolicy }}
+        ports:
+        - name: redis
+          containerPort: {{ .Values.redis.service.port }}
+          protocol: TCP
+        volumeMounts:
+        - name: redis-data
+          mountPath: /data
+      volumes:
+      - name: redis-data
+        {{- if .Values.redis.persistence.enabled }}
+        persistentVolumeClaim:
+          claimName: {{ include "appvote.fullname" . }}-redis-pvc
+        {{- else }}
+        emptyDir: {}
+        {{- end }}

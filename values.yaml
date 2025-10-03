@@ -1,0 +1,64 @@
+# Default values for appvote
+
+# Vote service configuration
+vote:
+  replicas: 1
+  image:
+    repository: dockersamples/examplevotingapp_vote
+    tag: latest
+    pullPolicy: IfNotPresent
+  service:
+    type: NodePort
+    port: 8080
+    targetPort: 80
+    nodePort: 31000
+
+# Result service configuration
+result:
+  replicas: 1
+  image:
+    repository: dockersamples/examplevotingapp_result
+    tag: latest
+    pullPolicy: IfNotPresent
+  service:
+    type: NodePort
+    port: 8081
+    targetPort: 80
+    nodePort: 31001
+
+# Worker service configuration
+worker:
+  replicas: 1
+  image:
+    repository: dockersamples/examplevotingapp_worker
+    tag: latest
+    pullPolicy: IfNotPresent
+
+# Redis configuration
+redis:
+  replicas: 1
+  image:
+    repository: redis
+    tag: alpine
+    pullPolicy: IfNotPresent
+  service:
+    type: ClusterIP
+    port: 6379
+  persistence:
+    enabled: false
+
+# PostgreSQL database configuration
+db:
+  replicas: 1
+  image:
+    repository: postgres
+    tag: 15-alpine
+    pullPolicy: IfNotPresent
+  service:
+    type: ClusterIP
+    port: 5432
+  auth:
+    username: postgres
+    password: postgres
+  persistence:
+    enabled: false

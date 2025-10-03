@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "appvote.fullname" . }}-vote
+  labels:
+    app: vote
+    {{- include "appvote.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.vote.replicas }}
+  selector:
+    matchLabels:
+      app: vote
+      {{- include "appvote.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        app: vote
+        {{- include "appvote.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+      - name: vote
+        image: "{{ .Values.vote.image.repository }}:{{ .Values.vote.image.tag }}"
+        imagePullPolicy: {{ .Values.vote.image.pullPolicy }}
+        ports:
+        - name: http
+          containerPort: {{ .Values.vote.service.targetPort }}
+          protocol: TCP

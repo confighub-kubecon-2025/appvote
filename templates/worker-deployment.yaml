@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "appvote.fullname" . }}-worker
+  labels:
+    app: worker
+    {{- include "appvote.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.worker.replicas }}
+  selector:
+    matchLabels:
+      app: worker
+      {{- include "appvote.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        app: worker
+        {{- include "appvote.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+      - name: worker
+        image: "{{ .Values.worker.image.repository }}:{{ .Values.worker.image.tag }}"
+        imagePullPolicy: {{ .Values.worker.image.pullPolicy }}
