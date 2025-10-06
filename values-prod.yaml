@@ -1,0 +1,7 @@
+vote:
+  ingress:
+    host: www.appvote.cubby.bz
+
+result:
+  ingress:
+    host: results.appvote.cubby.bz

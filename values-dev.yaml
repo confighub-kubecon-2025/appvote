@@ -1,0 +1,7 @@
+vote:
+  ingress:
+    host: dev-vote.appvote.cubby.bz
+
+result:
+  ingress:
+    host: dev-results.appvote.cubby.bz

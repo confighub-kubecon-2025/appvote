@@ -8,10 +8,11 @@ vote:
     tag: latest
     pullPolicy: IfNotPresent
   service:
-    type: NodePort
+    type: ClusterIP
     port: 8080
     targetPort: 80
-    nodePort: 31000
+  ingress:
+    host: base.appvote.cubby.bz
 
 # Result service configuration
 result:
@@ -21,10 +22,11 @@ result:
     tag: latest
     pullPolicy: IfNotPresent
   service:
-    type: NodePort
+    type: ClusterIP
     port: 8081
     targetPort: 80
-    nodePort: 31001
+  ingress:
+    host: base.appvote.cubby.bz
 
 # Worker service configuration
 worker:

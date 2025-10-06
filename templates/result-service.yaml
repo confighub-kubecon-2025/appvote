@@ -6,15 +6,34 @@ metadata:
     app: result
     {{- include "appvote.labels" . | nindent 4 }}
 spec:
-  type: {{ .Values.result.service.type }}
+  type: ClusterIP
   ports:
   - port: {{ .Values.result.service.port }}
     targetPort: http
     protocol: TCP
     name: result-service
-    {{- if and (eq .Values.result.service.type "NodePort") .Values.result.service.nodePort }}
-    nodePort: {{ .Values.result.service.nodePort }}
-    {{- end }}
   selector:
     app: result
     {{- include "appvote.selectorLabels" . | nindent 4 }}
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: result-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+  labels:
+    {{- include "appvote.labels" . | nindent 4 }}
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: {{ .Values.result.ingress.host }}
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: result
+            port:
+              number: {{ .Values.result.service.port }}
