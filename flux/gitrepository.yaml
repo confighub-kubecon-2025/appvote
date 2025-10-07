@@ -1,0 +1,10 @@
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: appvote
+  namespace: appvote
+spec:
+  interval: 1m
+  url: https://github.com/confighub-kubecon-2025/appvote
+  ref:
+    branch: main
