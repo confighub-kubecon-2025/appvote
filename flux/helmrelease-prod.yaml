@@ -1,0 +1,17 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: appvote
+  namespace: appvote
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: .
+      sourceRef:
+        kind: GitRepository
+        name: appvote
+      interval: 1m
+      valuesFiles:
+        - values.yaml
+        - values-prod.yaml
