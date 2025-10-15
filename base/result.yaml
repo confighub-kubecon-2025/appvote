@@ -55,7 +55,7 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: vote
+            name: result
             port:
               number: 8081
 
